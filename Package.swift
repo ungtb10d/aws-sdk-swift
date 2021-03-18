@@ -82,14 +82,8 @@ let package = Package(
 
 let relatedDependenciesBranch = "master"
 
-if ProcessInfo.processInfo.environment["SWIFTSDK_DEPS_USE_LOCAL_PATHS"] == nil {
-    package.dependencies += [
-        .package(name: "AwsCrt", url: "https://github.com/awslabs/aws-crt-swift", .branch(relatedDependenciesBranch)),
-        .package(name: "ClientRuntime", url: "https://github.com/awslabs/smithy-swift", .branch(relatedDependenciesBranch))
-    ]
-} else {
-    package.dependencies += [
-        .package(name: "AwsCrt", url: "https://github.com/awslabs/aws-crt-swift", .branch(relatedDependenciesBranch)),
-        .package(name: "ClientRuntime", path: "~/Projects/Amplify/SwiftSDK/smithy-swift")
-    ]
-}
+package.dependencies += [
+    .package(name: "AwsCrt", url: "https://github.com/awslabs/aws-crt-swift", .branch(relatedDependenciesBranch)),
+    .package(name: "ClientRuntime", url: "https://github.com/awslabs/smithy-swift", .branch(relatedDependenciesBranch))
+]
+
