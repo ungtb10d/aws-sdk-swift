@@ -3,13 +3,17 @@ import PackageDescription
 import class Foundation.ProcessInfo
 
 let package = Package(
-    name: "AWSClientRuntime",
+    name: "AWSSwiftSDK",
     platforms: [
 	.macOS(.v10_15),
 	.iOS(.v13)
     ],
     products: [
-        .library(name: "AWSClientRuntime", targets: ["AWSClientRuntime"])
+        .library(name: "AWSClientRuntime", targets: ["AWSClientRuntime"]),
+        .library(name: "Lambda", targets: ["Lambda"]),
+        .library(name: "Dynamodb", targets: ["Dynamodb"]),
+        .library(name: "Cognitoidentityprovider", targets: ["Cognitoidentityprovider"]),
+        .library(name: "Cognitoidentity", targets: ["Cognitoidentity"])
     ],
     targets: [
         .target(
@@ -20,6 +24,50 @@ let package = Package(
             ],
             path: "./AWSClientRuntime/Sources"
         ),
+        .target(
+            name: "Lambda",
+            dependencies: [
+                .product(
+                    name: "ClientRuntime",
+                    package: "ClientRuntime"
+                ),
+                "AWSClientRuntime"
+            ],
+            path: "./AlphaSwiftSDK/Lambda"
+        ),
+        .target(
+            name: "Dynamodb",
+            dependencies: [
+                .product(
+                    name: "ClientRuntime",
+                    package: "ClientRuntime"
+                ),
+                "AWSClientRuntime"
+            ],
+            path: "./AlphaSwiftSDK/Dynamodb"
+        ),
+        .target(
+              name: "Cognitoidentityprovider",
+              dependencies: [
+                  .product(
+                      name: "ClientRuntime",
+                      package: "ClientRuntime"
+                  ),
+                  "AWSClientRuntime"
+              ],
+              path: "./AlphaSwiftSDK/Cognitoidentityprovider"
+          ),
+          .target(
+              name: "Cognitoidentity",
+              dependencies: [
+                  .product(
+                      name: "ClientRuntime",
+                      package: "ClientRuntime"
+                  ),
+                  "AWSClientRuntime"
+              ],
+              path: "./AlphaSwiftSDK/Cognitoidentity"
+          ),
         .testTarget(
             name: "AWSClientRuntimeTests",
             dependencies: [
