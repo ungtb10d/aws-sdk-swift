@@ -90,6 +90,6 @@ if ProcessInfo.processInfo.environment["SWIFTSDK_DEPS_USE_LOCAL_PATHS"] == nil {
 } else {
     package.dependencies += [
         .package(name: "AwsCrt", url: "https://github.com/awslabs/aws-crt-swift", .branch(relatedDependenciesBranch)),
-        .package(name: "ClientRuntime", path: "./target/build/deps/smithy-swift")
+        .package(name: "ClientRuntime", path: "~/Projects/Amplify/SwiftSDK/smithy-swift")
     ]
 }
