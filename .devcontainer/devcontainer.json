@@ -1,0 +1,12 @@
+{
+    "name": "Swift 5.7",
+    "image": "swift:5.7-amazonlinux2",
+    "extensions": [
+      "sswg.swift-lang"
+    ],
+    "settings": {},
+    "onCreateCommand": "yum install -y openssl-devel python3.7",
+    "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind",
+    "workspaceFolder": "/workspace/aws-sdk-swift"
+}
+

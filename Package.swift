@@ -58,13 +58,8 @@ import struct Foundation.URL
      )
 */
 
-let RELEASE = "release"
-let LOCAL_BASE_DIR = "Projects/Amplify/SwiftSDK"
-let AWS_SDK_SWIFT_DIR = "\(LOCAL_BASE_DIR)/aws-sdk-swift"
-let AWS_CRT_SWIFT_DIR = "\(LOCAL_BASE_DIR)/aws-crt-swift"
-let SMITHY_SWIFT_DIR = "\(LOCAL_BASE_DIR)/smithy-swift"
-
-let homePath = FileManager.default.homeDirectoryForCurrentUser
+let packageManifestFileURL = URL(string: #filePath)!
+let projectRootFileURL = packageManifestFileURL.deletingLastPathComponent()
 let env = ProcessInfo.processInfo.environment
 
 let awsSDKSwiftDir, awsCRTSwiftDir, smithySwiftDir: URL
@@ -74,12 +69,10 @@ if let awsSDKSwiftCIPath = env["AWS_SDK_SWIFT_CI_DIR"], let awsCRTSwiftCIPath = 
     awsCRTSwiftDir = URL(fileURLWithPath: awsCRTSwiftCIPath)
     smithySwiftDir = URL(fileURLWithPath: smithySwiftCIPath)
 } else {
-    awsSDKSwiftDir = homePath.appendingPathComponent(AWS_SDK_SWIFT_DIR)
-    awsCRTSwiftDir = homePath.appendingPathComponent(AWS_CRT_SWIFT_DIR)
-    smithySwiftDir = homePath.appendingPathComponent(SMITHY_SWIFT_DIR)
+    awsSDKSwiftDir = projectRootFileURL.appendingPathComponent("..").appendingPathComponent("aws-sdk-swift")
+    awsCRTSwiftDir = projectRootFileURL.appendingPathComponent("..").appendingPathComponent("aws-crt-swift")
+    smithySwiftDir = projectRootFileURL.appendingPathComponent("..").appendingPathComponent("smithy-swift")
 }
-
-let localReleaseSwiftSDKDir = awsSDKSwiftDir.appendingPathComponent(RELEASE)
 
 private extension Package {
 
@@ -89,7 +82,8 @@ private extension Package {
             .package(name: "ClientRuntime", path: smithySwiftDir.path)
         ]
 
-        let sdksToIncludeInTargets = try! FileManager.default.contentsOfDirectory(atPath: localReleaseSwiftSDKDir.path)
+        let generatedSDKFileURL = projectRootFileURL.appendingPathComponent("release")
+        let sdksToIncludeInTargets = try! FileManager.default.contentsOfDirectory(atPath: generatedSDKFileURL.path)
         includeTargets(package: self, releasedSDKs: sdksToIncludeInTargets)
         return self
     }
@@ -101,7 +95,7 @@ private extension Package {
             libs.append(.library(name: sdkName, targets: [sdkName]))
             targets.append(.target(name: sdkName,
                                    dependencies: [.product(name: "ClientRuntime", package: "ClientRuntime"), "AWSClientRuntime"],
-                                   path: "./\(RELEASE)/\(sdkName)"))
+                                   path: "./\("release")/\(sdkName)"))
         }
         package.products += libs
         package.targets += targets
