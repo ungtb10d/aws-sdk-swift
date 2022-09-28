@@ -83,7 +83,7 @@ private extension Package {
         ]
 
         let generatedSDKFileURL = projectRootFileURL.appendingPathComponent("release")
-        let sdksToIncludeInTargets = try? FileManager.default.contentsOfDirectory(atPath: generatedSDKFileURL.path) ?? []
+        let sdksToIncludeInTargets = (try! FileManager.default.contentsOfDirectory(atPath: generatedSDKFileURL.path)).filter { $0 != ".gitkeep" }
         includeTargets(package: self, releasedSDKs: sdksToIncludeInTargets)
         return self
     }
